@@ -15,11 +15,21 @@ dotevn.config();
 // db connect
 DbConnect();
 // Access-Control
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://expence-tracker-frontend-beta.vercel.app/'
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173', // frontend URL
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }));
-
 
 // Root route that returns a welcome message
 app.get("/", (req, res) => res.status(200).send("Welcome to personal code testing"));
